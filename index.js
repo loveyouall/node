@@ -27,42 +27,69 @@ connection.end();
 
 const express = require('express')
 const app = express()
-const tableData = {tableData: [{
+const tableData = [{
+  id: 1,
   date: '2016-05-03',
   name: '王小虎',
   province: '上海',
   city: '普陀区',
   address: '上海市普陀区金沙江路 1518 弄',
-  zip: 200333
+  zip: 200333,
+  value2: true
 }, {
+  id: 2,
   date: '2016-05-02',
   name: '王小虎',
   province: '上海',
   city: '普陀区',
   address: '上海市普陀区金沙江路 1518 弄',
-  zip: 200333
+  zip: 200333,
+  value2: false
 }, {
+  id: 3,
   date: '2016-05-04',
   name: '王小虎',
   province: '上海',
   city: '普陀区',
   address: '上海市普陀区金沙江路 1518 弄',
-  zip: 200333
+  zip: 200333,
+  value2: true
+
 }, {
+  id: 4,
   date: '2016-05-01',
   name: '王小虎',
   province: '上海',
   city: '普陀区',
   address: '上海市普陀区金沙江路 1518 弄',
-  zip: 200333
+  zip: 200333,
+  value2: false
 }]
-}
+
 
 app.use(cors({
     origin:['*'],  //指定接收的地址
     methods:['GET','POST'],  //指定接收的请求类型
     alloweHeaders:['Content-Type','Authorization']  //指定header
 }))
+app.get('/:id/test', (req, res) => { 
+  let flag;  
+  if(req.params.id === '2') {
+    flag = 'true'
+  } else {
+    flag = 'false'
+  }
+  res.header('Access-Control-Allow-Origin', '*'); //这个表示任意域名都可以访问，这样写不能携带cookie了。
+  res.status(200)
+  // res.header('Access-Control-Allow-Credentials', true); // 允许服务器端发送Cookie数据
+  //res.header('Access-Control-Allow-Origin', 'www.baidu.com'); //这样写，只有www.baidu.com 可以访问。
+  res.header('Access-Control-Allow-Headers', 'Content-Type, Content-Length, Authorization, Accept, X-Requested-With , yourHeaderFeild');
+  res.header('Access-Control-Allow-Methods', 'PUT, POST, GET, DELETE, OPTIONS');//设置方法
+  res.writeHead(200,{'Content-Type':'text/html;charset=utf-8'});
+  // console.log(tableData)
+  // res.end(JSON.stringify(tableData))
+  return res.end(JSON.stringify({status: flag, statusCode: 200}))
+})
 app.get('/', (req, res) => {
   res.header('Access-Control-Allow-Origin', '*'); //这个表示任意域名都可以访问，这样写不能携带cookie了。
   // res.header('Access-Control-Allow-Credentials', true); // 允许服务器端发送Cookie数据
@@ -71,6 +98,7 @@ app.get('/', (req, res) => {
   res.header('Access-Control-Allow-Methods', 'PUT, POST, GET, DELETE, OPTIONS');//设置方法
   res.writeHead(200,{'Content-Type':'text/html;charset=utf-8'});
   // console.log(tableData)
+  
   res.end(JSON.stringify(tableData))
 })
 app.get('/test1', (req, res) => res.send('Hello World1!'))
