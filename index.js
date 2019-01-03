@@ -66,7 +66,31 @@ const tableData = [{
   zip: 200333,
   value2: false
 }]
-
+const user = [{
+  id: 1,
+  name: 'wbb',
+  password: '666',
+  operate: '1',
+  group: ''
+}, {
+  id: 2,
+  name: 'wd',
+  password: '233',
+  operate: '2',
+  group: ''
+}, {
+  id: 3,
+  name: 'lt',
+  password: '666',
+  operate: '3',
+  group: ''
+}, {
+  id: 4,
+  name: 'mt',
+  password: '666',
+  operate: '0',
+  group: ''
+}]
 
 const data = [{
   label: '一级 1',
@@ -103,7 +127,7 @@ const data = [{
     }]
   }]
 }]
-
+var flag = false
 app.use(cors({
     origin:['*'],  //指定接收的地址
     methods:['GET','POST'],  //指定接收的请求类型
@@ -111,12 +135,12 @@ app.use(cors({
 }))
 app.use(bodyParse.urlencoded({extended: false}))
 app.get('/:id/test', (req, res) => { 
-  let flag;  
   if(req.params.id === '2') {
     flag = 'true'
   } else {
     flag = 'false'
   }
+  flag = false
   res.header('Access-Control-Allow-Origin', '*'); //这个表示任意域名都可以访问，这样写不能携带cookie了。
   res.status(200)
   // res.header('Access-Control-Allow-Credentials', true); // 允许服务器端发送Cookie数据
@@ -154,6 +178,7 @@ app.get('/list', (req, res) => {
 app.post('/login', (req, res) => {
   let username = req.body.username.split('"').join("")
   let password = req.body.password.split('"').join("")
+ 
   // let username = req.body.username.replace(new RegExp(//"/), '')
   // let password = req.body.password.replace(new RegExp(//"/), '')
   console.log(username, password)
@@ -163,16 +188,20 @@ app.post('/login', (req, res) => {
   //res.header('Access-Control-Allow-Origin', 'www.baidu.com'); //这样写，只有www.baidu.com 可以访问。
   res.header('Access-Control-Allow-Headers', 'Content-Type, Content-Length, Authorization, Accept, X-Requested-With , yourHeaderFeild');
   res.header('Access-Control-Allow-Methods', 'PUT, POST, GET, DELETE, OPTIONS');//设置方法
-  console.log(req.body.username)
-  console.log(req.body.password)
   // res.json(req.body);
-  if(username === 'aaa' && password === '111') {
+  user.forEach( e => {
+    if(e.name === username && e.password === password) {
+      flag = e.operate
+    }
+  })
+  if(flag) {
     res.writeHead(200,{'Content-Type':'text/html;charset=utf-8'});
-    res.end(JSON.stringify({status: true, statusCode: 200}))
+    res.end(JSON.stringify({status: flag, statusCode: 200}))
   } else {
     res.writeHead(400,{'Content-Type':'text/html;charset=utf-8'});
     res.end(JSON.stringify({status: '无权限', statusCode: 400}))
   }
+  flag = false
 })
 app.get('/test3', (req, res) => res.send('Hello World3!'))
 app.get('/test4', (req, res) => res.send('Hello World4!'))
