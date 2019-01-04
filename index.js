@@ -127,6 +127,23 @@ const data = [{
     }]
   }]
 }]
+const student = [{
+  id: 1,
+  name: 'wbb',
+  count: '100'
+}, {
+  id: 1,
+  name: 'wbb',
+  count: '100'
+}, {
+  id: 1,
+  name: 'wbb',
+  count: '100'
+}, {
+  id: 1,
+  name: 'wbb',
+  count: '100'
+}]
 var flag = false
 app.use(cors({
     origin:['*'],  //指定接收的地址
@@ -152,7 +169,7 @@ app.get('/:id/test', (req, res) => {
   // res.end(JSON.stringify(tableData))
   return res.end(JSON.stringify({status: flag, statusCode: 200}))
 })
-app.get('/', (req, res) => {
+app.get('/table', (req, res) => {
   res.header('Access-Control-Allow-Origin', '*'); //这个表示任意域名都可以访问，这样写不能携带cookie了。
   // res.header('Access-Control-Allow-Credentials', true); // 允许服务器端发送Cookie数据
   //res.header('Access-Control-Allow-Origin', 'www.baidu.com'); //这样写，只有www.baidu.com 可以访问。
@@ -162,6 +179,17 @@ app.get('/', (req, res) => {
   // console.log(tableData)
   
   res.end(JSON.stringify(tableData))
+})
+app.get('/:id', (req, res) => {
+  res.header('Access-Control-Allow-Origin', '*'); //这个表示任意域名都可以访问，这样写不能携带cookie了。
+  // res.header('Access-Control-Allow-Credentials', true); // 允许服务器端发送Cookie数据
+  //res.header('Access-Control-Allow-Origin', 'www.baidu.com'); //这样写，只有www.baidu.com 可以访问。
+  res.header('Access-Control-Allow-Headers', 'Content-Type, Content-Length, Authorization, Accept, X-Requested-With , yourHeaderFeild');
+  res.header('Access-Control-Allow-Methods', 'PUT, POST, GET, DELETE, OPTIONS');//设置方法
+  res.writeHead(200,{'Content-Type':'text/html;charset=utf-8'});
+  // console.log(tableData)
+  console.log(req.params.id)
+  res.end(JSON.stringify(student))
 })
 app.get('/list', (req, res) => {
   res.header('Access-Control-Allow-Origin', '*'); //这个表示任意域名都可以访问，这样写不能携带cookie了。
@@ -181,7 +209,7 @@ app.post('/login', (req, res) => {
  
   // let username = req.body.username.replace(new RegExp(//"/), '')
   // let password = req.body.password.replace(new RegExp(//"/), '')
-  console.log(username, password)
+  // console.log(username, password)
   res.header('Access-Control-Allow-Origin', '*'); //这个表示任意域名都可以访问，这样写不能携带cookie了。
   res.status(200)
   // res.header('Access-Control-Allow-Credentials', true); // 允许服务器端发送Cookie数据
@@ -189,14 +217,17 @@ app.post('/login', (req, res) => {
   res.header('Access-Control-Allow-Headers', 'Content-Type, Content-Length, Authorization, Accept, X-Requested-With , yourHeaderFeild');
   res.header('Access-Control-Allow-Methods', 'PUT, POST, GET, DELETE, OPTIONS');//设置方法
   // res.json(req.body);
+  let name;
   user.forEach( e => {
-    if(e.name === username && e.password === password) {
+    if(e.id === parseInt(username) && e.password === password) {
       flag = e.operate
+      name = e.name
     }
   })
+  console.log(flag)
   if(flag) {
     res.writeHead(200,{'Content-Type':'text/html;charset=utf-8'});
-    res.end(JSON.stringify({status: flag, statusCode: 200}))
+    res.end(JSON.stringify({status: {token: flag, name: name}, statusCode: 200}))
   } else {
     res.writeHead(400,{'Content-Type':'text/html;charset=utf-8'});
     res.end(JSON.stringify({status: '无权限', statusCode: 400}))
