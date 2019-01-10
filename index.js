@@ -92,7 +92,7 @@ const manager = [{
   operate: '1',
   group: ''
 }]
-const data = [{
+const classroom = [{
   label: '一级 1',
   children: [{
     label: '二级 1-1',
@@ -180,7 +180,7 @@ app.get('/table', (req, res) => {
   
   res.end(JSON.stringify(tableData))
 })
-app.get('/:id', (req, res) => {
+app.get('/list/:id', (req, res) => {
   res.header('Access-Control-Allow-Origin', '*'); //这个表示任意域名都可以访问，这样写不能携带cookie了。
   // res.header('Access-Control-Allow-Credentials', true); // 允许服务器端发送Cookie数据
   //res.header('Access-Control-Allow-Origin', 'www.baidu.com'); //这样写，只有www.baidu.com 可以访问。
@@ -191,7 +191,8 @@ app.get('/:id', (req, res) => {
   console.log(req.params.id)
   res.end(JSON.stringify(student))
 })
-app.get('/list', (req, res) => {
+// 教室列表
+app.get('/classroom', (req, res) => {
   res.header('Access-Control-Allow-Origin', '*'); //这个表示任意域名都可以访问，这样写不能携带cookie了。
   res.status(200)
   // res.header('Access-Control-Allow-Credentials', true); // 允许服务器端发送Cookie数据
@@ -201,8 +202,23 @@ app.get('/list', (req, res) => {
   res.writeHead(200,{'Content-Type':'text/html;charset=utf-8'});
   // console.log(tableData)
   // res.end(JSON.stringify(tableData))
-  return res.end(JSON.stringify({table: data, statusCode: 200}))
+  console.log('data', classroom)
+  return res.end(JSON.stringify({table: classroom, statusCode: 200}))
 })
+app.get('/classroom/:id', (req, res) => {
+  res.header('Access-Control-Allow-Origin', '*'); //这个表示任意域名都可以访问，这样写不能携带cookie了。
+  res.status(200)
+  // res.header('Access-Control-Allow-Credentials', true); // 允许服务器端发送Cookie数据
+  //res.header('Access-Control-Allow-Origin', 'www.baidu.com'); //这样写，只有www.baidu.com 可以访问。
+  res.header('Access-Control-Allow-Headers', 'Content-Type, Content-Length, Authorization, Accept, X-Requested-With , yourHeaderFeild');
+  res.header('Access-Control-Allow-Methods', 'PUT, POST, GET, DELETE, OPTIONS');//设置方法
+  res.writeHead(200,{'Content-Type':'text/html;charset=utf-8'});
+  // console.log(tableData)
+  // res.end(JSON.stringify(tableData))
+  console.log('data', classroom)
+  return res.end(JSON.stringify({table: classroom, statusCode: 200}))
+})
+// 登录
 app.post('/login', (req, res) => {
   let username = req.body.username.split('"').join("")
   let password = req.body.password.split('"').join("")
