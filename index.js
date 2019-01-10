@@ -66,13 +66,7 @@ const tableData = [{
   zip: 200333,
   value2: false
 }]
-const user = [{
-  id: 1,
-  name: 'wbb',
-  password: '666',
-  operate: '1',
-  group: ''
-}, {
+const user = [ {
   id: 2,
   name: 'wd',
   password: '233',
@@ -91,7 +85,13 @@ const user = [{
   operate: '0',
   group: ''
 }]
-
+const manager = [{
+  id: 1,
+  name: 'wbb',
+  password: '666',
+  operate: '1',
+  group: ''
+}]
 const data = [{
   label: '一级 1',
   children: [{
@@ -206,7 +206,8 @@ app.get('/list', (req, res) => {
 app.post('/login', (req, res) => {
   let username = req.body.username.split('"').join("")
   let password = req.body.password.split('"').join("")
- 
+  let select = req.body.select.split('"').join("")
+  // let select = req.body.select
   // let username = req.body.username.replace(new RegExp(//"/), '')
   // let password = req.body.password.replace(new RegExp(//"/), '')
   // console.log(username, password)
@@ -218,18 +219,26 @@ app.post('/login', (req, res) => {
   res.header('Access-Control-Allow-Methods', 'PUT, POST, GET, DELETE, OPTIONS');//设置方法
   // res.json(req.body);
   let name;
-  user.forEach( e => {
-    if(e.id === parseInt(username) && e.password === password) {
-      flag = e.operate
-      name = e.name
-    }
-  })
-  console.log(flag)
+  if(select === '1') {
+    user.forEach( e => {
+      if(e.id === parseInt(username) && e.password === password) {
+        flag = e.operate
+        name = e.name
+      }
+    })
+  } else if (select === '2') {
+    manager.forEach( e => {
+      if(e.id === parseInt(username) && e.password === password) {
+        flag = e.operate
+        name = e.name
+      }
+    })
+  }
   if(flag) {
     res.writeHead(200,{'Content-Type':'text/html;charset=utf-8'});
     res.end(JSON.stringify({status: {token: flag, name: name}, statusCode: 200}))
   } else {
-    res.writeHead(400,{'Content-Type':'text/html;charset=utf-8'});
+    res.writeHead(200,{'Content-Type':'text/html;charset=utf-8'});
     res.end(JSON.stringify({status: '无权限', statusCode: 400}))
   }
   flag = false
