@@ -1,4 +1,4 @@
-// var mysql = require('mysql');  
+﻿// var mysql = require('mysql');  
 // var connection = mysql.createConnection({     
 //   host     : 'localhost',       
 //   user     : 'root',              
@@ -21,8 +21,10 @@
 // connection.end();
 var cors = require('cors');
 var bodyParse = require('body-parser')
-var multer = require('multer'); // v1.0.5
-var upload = multer(); // for parsing multipart/form-data
+// var multer = require('multer'); 
+// v1.0.5
+// var upload = multer(); 
+// for parsing multipart/form-data
 
 
 
